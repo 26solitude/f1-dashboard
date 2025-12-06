@@ -1,0 +1,17 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: f1-mysql
+    restart: always
+    ports:
+      - "3306:3306" # 로컬 포트 : 컨테이너 포트
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: f1_dashboard
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user1234
+    volumes:
+      - ./db/data:/var/lib/mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
