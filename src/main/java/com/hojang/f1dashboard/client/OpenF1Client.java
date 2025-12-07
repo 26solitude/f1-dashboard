@@ -11,10 +11,15 @@ import java.util.List;
 @Component
 public class OpenF1Client {
 
-    private final RestClient restClient = RestClient.builder()
-            .baseUrl("https://api.openf1.org/v1")
-            .build();
+    private final RestClient restClient;
 
+    public OpenF1Client(RestClient.Builder builder) {
+        this.restClient = builder
+                .baseUrl("https://api.openf1.org/v1")
+                .build();
+    }
+
+    // 1. 경기 일정 조회
     public List<MeetingResponse> getMeetings(int year) {
         return restClient.get()
                 .uri("/meetings?year={year}", year)
@@ -23,13 +28,22 @@ public class OpenF1Client {
                 });
     }
 
+
     public record MeetingResponse(
             @JsonProperty("meeting_key") Long meetingKey,
+            @JsonProperty("year") Integer year,
+            @JsonProperty("circuit_key") Long circuitKey,
+
             @JsonProperty("meeting_name") String meetingName,
+            @JsonProperty("meeting_official_name") String meetingOfficialName,
+            @JsonProperty("circuit_short_name") String circuitShortName,
             @JsonProperty("location") String location,
             @JsonProperty("country_name") String countryName,
+            @JsonProperty("country_code") String countryCode,
+
             @JsonProperty("date_start") OffsetDateTime dateStart,
-            int year
+            @JsonProperty("gmt_offset") String gmtOffset
     ) {
     }
+
 }
