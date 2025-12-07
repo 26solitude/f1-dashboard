@@ -28,6 +28,14 @@ public class OpenF1Client {
                 });
     }
 
+    // 2. 특정 세션의 드라이버 목록 조회
+    public List<DriverResponse> getDrivers(int sessionKey) {
+        return restClient.get()
+                .uri("/drivers?session_key={sessionKey}", sessionKey)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {});
+    }
+
 
     public record MeetingResponse(
             @JsonProperty("meeting_key") Long meetingKey,
@@ -45,5 +53,15 @@ public class OpenF1Client {
             @JsonProperty("gmt_offset") String gmtOffset
     ) {
     }
+
+    public record DriverResponse(
+            @JsonProperty("driver_number") Integer driverNumber, // PK
+            @JsonProperty("name_acronym") String nameAcronym,    // VER
+            @JsonProperty("full_name") String fullName,          // Max VERSTAPPEN
+            @JsonProperty("team_name") String teamName,          // Red Bull Racing
+            @JsonProperty("team_colour") String teamColour,      // 3671C6
+            @JsonProperty("headshot_url") String headshotUrl,    // 이미지 URL
+            @JsonProperty("country_code") String countryCode     // NED
+    ) {}
 
 }
